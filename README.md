@@ -174,15 +174,47 @@ public void giveStarterKit(Player p) {
 }
 ```
 
-### ConfigBuilder
+### Laden van je config
 
 ```java
-ConfigFile mainCfg = ConfigBuilder.of(plugin)
-    .fileName("config.yml")
-    .autoSave(true)
-    .register(BlockKit.getConfigService());
+// ────────────────────────────────────────────────────────────────
+// 1) Laden van je config in onEnable()
+// ────────────────────────────────────────────────────────────────
 
-String mode = mainCfg.getConfiguration().getString("game.mode");
+@Override
+public void onEnable() {
+    // 1. Init BlockKit
+    BlockKit.init(this);
+
+    // 2. DSL-stijl config registreren & automatisch opslaan bij shutdown
+    ConfigFile mainCfg = ConfigBuilder.of(this)
+        .fileName("config.yml")
+        .autoSave(true)
+        .register(BlockKit.getConfigService());
+
+    // 3. Waarden uitlezen met defaults
+    String welcome = mainCfg.getConfiguration()
+        .getString("messages.welcome", "&aWelkom op de server, %player%!");
+    int maxPlayers = mainCfg.getConfiguration()
+        .getInt("game.maxPlayers", 50);
+
+    // 4. Gebruik in je plugin
+    BlockKit.getChat().broadcast(welcome.replace("%player%", "wereld"));
+    getLogger().info("Maximum spelers ingesteld op " + maxPlayers);
+}
+```
+
+### Waarde aanpassen & opslaan
+
+```java
+public void setMaxPlayers(int newMax) {
+    ConfigFile cfg = BlockKit.getConfigService().get("config.yml");
+    cfg.getConfiguration().set("game.maxPlayers", newMax);
+    cfg.save();  // direct wegschrijven naar disk
+
+    BlockKit.getChat().broadcast(
+        "&eMaxPlayers aangepast naar " + newMax);
+}
 ```
 
 ### StringPipeline
