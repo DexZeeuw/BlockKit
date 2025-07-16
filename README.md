@@ -86,6 +86,19 @@ mvn clean install
 
 ## ✨ Usage Examples
 
+### Initialize
+```java
+@Override
+public void onEnable() {
+    BlockKit.init(this);
+    // nu kun je:
+    // BlockKit.getChatService().send(player, "Welkom!");
+    // BlockKit.getMenuManager().register(...);
+    // BlockKit.getConfigService()….
+    // BlockKit.getTimeService().until(...);
+}
+```
+
 ### ItemBuilder
 
 ```java
