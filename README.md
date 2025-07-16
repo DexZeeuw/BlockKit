@@ -99,33 +99,79 @@ public void onEnable() {
 }
 ```
 
-### ItemBuilder
+### Item bouwen
 
 ```java
-ItemStack sword = ItemBuilder.of(Material.DIAMOND_SWORD)
-    .name("Excalibur")
-    .lore("Legendary blade", "Unbreakable")
-    .enchant(Enchantment.DAMAGE_ALL, 5, true)
-    .tag("rarity", "epic")
+// 1) Basis “legendary” zwaard maken en toevoegen aan speler-inventory
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+Player player = …;
+ItemStack excalibur = BlockKit
+    .itemBuilder(Material.DIAMOND_SWORD)
+    .name("&6Excalibur")                             // goudkleurige naam
+    .lore("&7Legendary sword", "&aUnbreakable")      // twee regels lore
+    .enchant(Enchantment.DAMAGE_ALL, 5, true)        // Sharpness V
+    .tag("rarity", "legendary")                      // in NBT opslaan
+    .customModelData(101)                            // custom model data voor resourcepack
     .build();
+
+player.getInventory().addItem(excalibur);
 ```
 
-### MenuBuilder
+### Menu bouwen
 
 ```java
-Inventory menu = MenuBuilder.of("Select Option", 3)
+// menu bouwen
+Inventory shop = BlockKit
+    .menuBuilder("Equipment Shop", 3)
     .background(filler)
-    .item(2, 5, specialItem)
-    .onClick(2, 5, e -> e.getPlayer().sendMessage("Clicked it!"))
+    .item(1, 1, chestplate)
+    .item(1, 3, excalibur)
+    .onClick(1, 1, e -> {
+        Player clicker = (Player) e.getWhoClicked();
+        clicker.getInventory().addItem(chestplate);
+        clicker.closeInventory();
+        BlockKit.getChat().send(clicker, "Je hebt de Guardian Chestplate gekocht!");
+    })
+    .onClick(1, 3, e -> {
+        Player clicker = (Player) e.getWhoClicked();
+        clicker.getInventory().addItem(excalibur);
+        clicker.closeInventory();
+        BlockKit.getChat().send(clicker, "Je hebt Excalibur gekocht!");
+    })
     .build();
-player.openInventory(menu);
+
+// registreer en open
+BlockKit.getMenuManager().register(shop);
+player.openInventory(shop);
 ```
 
-### ChatService
+### Chats versturen
 
 ```java
 BlockKit.getChat().messenger().send(player, "Welcome aboard!");
 BlockKit.getChat().messenger().broadcast("&cServer restarts in 5 minutes!");
+```
+
+### Items & Chats
+
+```java
+// 4) Items in een andere context (bv. shop-koppeling)
+public void giveStarterKit(Player p) {
+    ItemStack sword = BlockKit.itemBuilder(Material.IRON_SWORD)
+        .name("&bStarter Sword")
+        .build();
+
+    ItemStack pick  = BlockKit.itemBuilder(Material.IRON_PICKAXE)
+        .name("&bStarter Pickaxe")
+        .build();
+
+    p.getInventory().addItem(sword, pick);
+    BlockKit.getChat().send(p, "&aJe hebt je starterkit ontvangen!");
+}
 ```
 
 ### ConfigBuilder
