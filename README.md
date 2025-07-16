@@ -217,6 +217,29 @@ public void setMaxPlayers(int newMax) {
 }
 ```
 
+### Tijd gebruik
+
+```java
+// Basis countdown tot morgen 12:00
+String untilNoon = BlockKit.getTimeService()
+    .until(LocalDateTime.now()
+        .plusDays(1)
+        .withHour(12).withMinute(0));
+BlockKit.getChat().broadcast("&eNog " + untilNoon + " tot morgen 12:00");
+
+// Custom formatter met Nederlands en skip-zero=false
+DurationFormatter custom = DurationFormatterBuilder.of()
+    .locale(new Locale("nl"))
+    .skipZeroUnits(false)
+    .labelDays("dag", "dagen")
+    .labelHours("uur", "uur")
+    .build();
+
+TimeService customService = new TimeService(custom);
+String sinceEvent = customService.since(LocalDateTime.of(2025,7,16,9,0));
+BlockKit.getChat().broadcast("&aSinds event: " + sinceEvent);
+```
+
 ### StringPipeline
 
 ```java
