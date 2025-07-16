@@ -261,6 +261,22 @@ String countdown = BlockKit.getTimeService()
 // "3 uur 45 minuten"
 ```
 
+### StringPipeline
+
+```java
+String raw = "  héllö   wørld  ";
+String transformed = StringPipeline.of(raw)
+    .trim()
+    .stripAccents()
+    .normalizeSpaces()
+    .capitalizeAllWords()
+    .center(20, '*')
+    .build();
+
+// transformed == "**Hello World****"
+player.sendMessage(transformed);
+```
+
 ---
 
 ## 📑 Project Structure
