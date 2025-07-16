@@ -300,6 +300,38 @@ String transformed = StringPipeline.of(raw)
 player.sendMessage(transformed);
 ```
 
+### ChatComponent
+
+```java
+// A) Eenvoudig gekleurde tekst met hover
+BaseComponent[] msg1 = ChatComponentBuilder
+    .text("Klik ")
+    .then("hier")
+      .color(ChatColor.GOLD)
+      .hoverText("Bezoek onze site")
+      .onClickOpenUrl("https://example.com")
+    .then(" voor meer info")
+    .build();
+player.spigot().sendMessage(msg1);
+```
+
+```java
+// B) Tooltip met item en run‐command
+ItemStack gift = BlockKit.itemBuilder(Material.CHEST)
+    .name("&bMystery Box")
+    .tag("loot", "epic")
+    .build();
+
+BaseComponent[] msg2 = ChatComponentBuilder
+    .text("Ontvang je gift: ")
+    .then("Mystery Box")
+      .color(ChatColor.AQUA)
+      .hoverItem(gift)
+      .onClickRunCommand("/openbox")
+    .build();
+player.spigot().sendMessage(msg2);
+```
+
 ---
 
 ## 📑 Project Structure
