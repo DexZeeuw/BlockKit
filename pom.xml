@@ -19,14 +19,13 @@
     </modules>
 
     <properties>
-        <!-- Java en compiler-instellingen -->
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-
-        <!-- Spigot API -->
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <spigot.api.version>1.21.5-R0.1-SNAPSHOT</spigot.api.version>
     </properties>
+
 
     <repositories>
         <repository>
