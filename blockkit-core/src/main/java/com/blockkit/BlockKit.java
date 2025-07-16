@@ -29,6 +29,7 @@ import com.blockkit.core.time.TimeService;
 public final class BlockKit {
 
     private static Plugin plugin;
+    private static ChatConfig chatConfig;
     private static ChatMessenger chat;
     private static ConfigService config;
     private static MenuManager menuManager;
@@ -50,9 +51,7 @@ public final class BlockKit {
         }
         plugin = pl;
 
-        // Chat subsystem
-        ChatConfig chatConfig = new ChatConfig(plugin);
-        chat = new ChatMessengerImpl(new ChatFormatterImpl(chatConfig));
+        // Chat subsystem wordt pas geactiveerd via setChatConfig()
 
         // Config subsystem
         config = new ConfigService();
@@ -69,9 +68,21 @@ public final class BlockKit {
         return plugin;
     }
 
-    /** @return ChatMessenger for sending formatted messages */
+    public static void setChatConfig(ChatConfig config) {
+        chatConfig = config;
+        chat = new ChatMessengerImpl(new ChatFormatterImpl(chatConfig));
+    }
+
+
     public static ChatMessenger getChat() {
+        if (chat == null) {
+            throw new IllegalStateException("Chat subsystem not initialized. Call BlockKit.setChatConfig(...) first.");
+        }
         return chat;
+    }
+
+    public static ChatConfig getChatConfig() {
+        return chatConfig;
     }
 
     /** @return a new ItemBuilder for creating ItemStacks fluently */
