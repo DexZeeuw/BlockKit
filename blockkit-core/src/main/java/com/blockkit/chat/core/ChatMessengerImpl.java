@@ -35,5 +35,7 @@ public class ChatMessengerImpl implements ChatMessenger {
     public void broadcast(String rawMessage) {
         String msg = formatter.format(rawMessage);
         Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(msg));
+
+        Bukkit.getConsoleSender().sendMessage(msg);
     }
 }
