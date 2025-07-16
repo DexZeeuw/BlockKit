@@ -332,6 +332,41 @@ BaseComponent[] msg2 = ChatComponentBuilder
 player.spigot().sendMessage(msg2);
 ```
 
+### FS extras
+
+```java
+@Override
+public void onEnable() {
+    // Extract default map uit jar
+    try {
+        ResourceExtractor.extract(
+            this, "default/maps/map1", 
+            new File(getDataFolder(), "maps/map1"), false);
+    } catch (IOException e) {
+        getLogger().severe("Extract failed: " + e.getMessage());
+    }
+
+    // Backup map
+    DirectoryCopier.copyDirectory(
+        new File(getDataFolder(), "maps"), 
+        new File(getDataFolder(), "maps_backup"));
+
+    // Watch plugin folder voor wijzigingen
+    try {
+        DirWatcher watcher = DirWatcher.of(
+            getDataFolder().toPath(), evt ->
+                getLogger().info("FS change: " + evt.kind() + " -> " + evt.context()));
+        watcher.start();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    // List datafolder contents
+    List<File> files = FileUtils.list(getDataFolder());
+    files.forEach(f -> getLogger().info("Found: " + f.getName()));
+}
+```
+
 ---
 
 ## 📑 Project Structure
