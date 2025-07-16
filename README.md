@@ -149,6 +149,29 @@ BlockKit.getMenuManager().register(shop);
 player.openInventory(shop);
 ```
 
+### Pagination
+
+```java
+// Bereid een lange lijst items voor
+List<ItemStack> shopItems = new ArrayList<>();
+for (Material mat : Material.values()) {
+    shopItems.add(
+        BlockKit.itemBuilder(mat)
+            .name(mat.name())
+            .build()
+    );
+}
+
+// Bouw een paginated menu (5 rijen hoog)
+PaginationBuilder.Pagination menuPages = PaginationBuilder
+    .of(shopItems, "Shop Items", 5)
+    .build();
+
+// Registreer alle pagina’s en open de eerste
+menuPages.getPageCount(); // bijv. 10 pagina's
+menuPages.open(player);
+```
+
 ### Chats versturen
 
 ```java
