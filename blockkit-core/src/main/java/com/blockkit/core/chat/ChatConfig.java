@@ -20,8 +20,6 @@ public class ChatConfig {
 
     public ChatConfig(Plugin plugin) {
         this.plugin = plugin;
-        // Zorg dat config.yml standaard wordt weggeschreven
-        plugin.saveDefaultConfig();
     }
 
     public String getPrefix() {
