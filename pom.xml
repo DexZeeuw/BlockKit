@@ -19,13 +19,25 @@
     </modules>
 
     <properties>
+        <!-- Java en compiler-instellingen -->
         <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <!-- Spigot API -->
         <spigot.api.version>1.21.5-R0.1-SNAPSHOT</spigot.api.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>spigotmc-snapshots</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
-            <!-- Define shared Spigot API version and scope here -->
+            <!-- gedeelde Spigot API version+scope -->
             <dependency>
                 <groupId>org.spigotmc</groupId>
                 <artifactId>spigot-api</artifactId>
@@ -35,11 +47,20 @@
         </dependencies>
     </dependencyManagement>
 
-    <repositories>
-        <repository>
-            <id>spigotmc-snapshots</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- expliciete compiler plugin config -->
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
