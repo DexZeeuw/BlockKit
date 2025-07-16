@@ -27,7 +27,7 @@ Provides battle-tested implementations, organized by feature:
 
 - **item**  
   - Builder: `ItemBuilder.of(...)`  
-  - Utils: `ItemStackUtils`, `EnchantmentUtils`, `NBTUtils`, `TagUtils`
+  - Utils: `ItemStackUtils`, `EnchantmentUtils`, `NBTUtils`
 - **menu**  
   - `MenuBuilder.of(...)`, `BorderUtils`, `MenuManager`, `MenuListener`
 - **text**  
@@ -106,7 +106,7 @@ ItemStack sword = ItemBuilder.of(Material.DIAMOND_SWORD)
     .name("Excalibur")
     .lore("Legendary blade", "Unbreakable")
     .enchant(Enchantment.DAMAGE_ALL, 5, true)
-    .addTag(ItemTag.LEGENDARY)
+    .tag("rarity", "epic")
     .build();
 ```
 
