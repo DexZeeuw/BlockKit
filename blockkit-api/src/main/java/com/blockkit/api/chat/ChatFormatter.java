@@ -1,7 +1,5 @@
 package com.blockkit.api.chat;
 
-import org.bukkit.command.CommandSender;
-
 /**
  * Formats a raw message into a styled chat line (prefix, colors, etc).
  */

@@ -1,10 +1,4 @@
-package com.blockkit.string.extras;
-
-import com.blockkit.string.util.StringNormalizeUtils;
-import com.blockkit.string.util.StringStripUtils;
-import com.blockkit.string.util.StringCaseUtils;
-import com.blockkit.string.util.StringPadUtils;
-
+package com.blockkit.extras.string;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;

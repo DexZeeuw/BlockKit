@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="
+           http://maven.apache.org/POM/4.0.0
+           http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.DexZeeuw</groupId>
+    <artifactId>BlockKit</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>BlockKit Parent</name>
+
+    <modules>
+        <module>blockkit-api</module>
+        <module>blockkit-core</module>
+        <module>blockkit-extras</module>
+    </modules>
+
+    <properties>
+        <java.version>11</java.version>
+        <spigot.api.version>1.21.5-R0.1-SNAPSHOT</spigot.api.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Define shared Spigot API version and scope here -->
+            <dependency>
+                <groupId>org.spigotmc</groupId>
+                <artifactId>spigot-api</artifactId>
+                <version>${spigot.api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

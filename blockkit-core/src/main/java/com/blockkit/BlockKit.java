@@ -1,25 +1,25 @@
 package com.blockkit;
 
+import com.blockkit.core.chat.ChatConfig;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
 import com.blockkit.api.chat.ChatMessenger;
-import com.blockkit.chat.core.ChatConfig;
-import com.blockkit.chat.core.ChatFormatterImpl;
-import com.blockkit.chat.core.ChatMessengerImpl;
+import com.blockkit.core.chat.ChatFormatterImpl;
+import com.blockkit.core.chat.ChatMessengerImpl;
 
 import com.blockkit.api.item.ItemBuilder;
-import com.blockkit.item.builder.ItemBuilderImpl;
+import com.blockkit.core.item.builder.ItemBuilderImpl;
 
 import com.blockkit.api.menu.MenuBuilder;
 import com.blockkit.api.menu.MenuManager;
-import com.blockkit.menu.builder.MenuBuilderImpl;
-import com.blockkit.menu.core.MenuManagerImpl;
+import com.blockkit.core.menu.builder.MenuBuilderImpl;
+import com.blockkit.core.menu.core.MenuManagerImpl;
 
-import com.blockkit.config.core.ConfigService;
+import com.blockkit.core.config.ConfigService;
 
-import com.blockkit.time.core.DefaultDurationFormatter;
-import com.blockkit.time.core.TimeService;
+import com.blockkit.core.time.DefaultDurationFormatter;
+import com.blockkit.core.time.TimeService;
 
 /**
  * Central entry point for BlockKit.

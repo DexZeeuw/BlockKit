@@ -1,8 +1,8 @@
 package com.blockkit.config.extras;
 
 import com.blockkit.config.api.ConfigFile;
-import com.blockkit.config.core.ConfigService;
-import com.blockkit.config.core.YamlConfig;
+import com.blockkit.core.config.ConfigService;
+import com.blockkit.core.config.YamlConfig;
 import org.bukkit.plugin.Plugin;
 
 /**

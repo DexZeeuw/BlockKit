@@ -1,7 +1,8 @@
-package com.blockkit.chat.extras;
+package com.blockkit.extras.chat;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;

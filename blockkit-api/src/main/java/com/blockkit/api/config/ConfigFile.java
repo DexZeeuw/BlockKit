@@ -7,20 +7,15 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public interface ConfigFile {
 
-    /**
-     * Load the configuration from disk (or create defaults).
-     */
+    /** Laadt of herlaadt dit config‐bestand */
     void load();
 
-    /**
-     * Save the current in-memory state back to disk.
-     */
+    /** Slaat het bestand op schijf */
     void save();
 
-    /**
-     * Get the underlying FileConfiguration for queries.
-     *
-     * @return the Bukkit FileConfiguration instance
-     */
+    /** Geeft de Bukkit‐wrapper terug */
     FileConfiguration getConfiguration();
+
+    /** Haalt de bestandsnaam (incl. .yml) op */
+    String getFileName();
 }
