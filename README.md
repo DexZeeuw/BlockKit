@@ -1,7 +1,22 @@
 # 🧱 BlockKit ![🛠](https://img.shields.io/badge/Minecraft-Toolkit-green?logo=github)
 
 Modulaire toolkit voor Minecraft-plugins op Spigot. Fluente builders, GUI DSLs, config wrappers, en meer.  
-Sinds `v1.0.1` stel je ChatConfig pas **na** `BlockKit.init(...)` in.
+
+---
+
+## 🌍 WorldKit — Werelden bouwen en beheren
+
+Vanaf versie `1.0.2` introduceert BlockKit de **WorldKit** — een fluente API voor het creëren, aanpassen en verwijderen van Minecraft–werelden. Inclusief support voor presets, gamerules, tijd, weer en teleportatie.
+
+### 🔨 Wereld aanmaken
+
+```java
+World world = BlockKit.worldBuilder()
+    .name("arena")
+    .environment(Environment.NORMAL)
+    .type(WorldType.FLAT)
+    .preset(WorldPreset.VOID)
+    .build();
 
 ---
 
@@ -49,6 +64,7 @@ public void onEnable() {
 | `ChatKit`    | Kleuren, hover/click, multi-line, gradients |
 | `ItemKit`    | Fluente `ItemStack` builder                 |
 | `MenuKit`    | Inventory GUIs, DSL, click-handlers         |
+| `WorldKit`   | Fluente `WorldBuilder` builder, werelden beheren | 
 | `ConfigKit`  | YAML DSL, auto-save, resource loaders       |
 | `TimeKit`    | Countdown/elapsed-formatters                |
 | `FSKit`      | Copy, resource extractie, dir-utils         |
