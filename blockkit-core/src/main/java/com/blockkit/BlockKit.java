@@ -33,6 +33,7 @@ public final class BlockKit {
     private static ChatMessenger chat;
     private static ConfigService config;
     private static MenuManager menuManager;
+    private static WorldManager worldManager;
     private static TimeService timeService;
 
     private BlockKit() {
@@ -58,6 +59,7 @@ public final class BlockKit {
 
         // Menu subsystem
         menuManager = MenuManagerImpl.getInstance();
+        worldManager = new WorldManagerImpl();
 
         // Time subsystem
         timeService = new TimeService(new DefaultDurationFormatter());
@@ -95,10 +97,21 @@ public final class BlockKit {
         return new MenuBuilderImpl(title, rows);
     }
 
+    /** @return a new WorldBuilder for building worlds */
+    public static WorldBuilder worldBuilder() {
+        return new WorldBuilder();
+    }
+
     /** @return MenuManager for registering menus and click handlers */
     public static MenuManager getMenuManager() {
         return menuManager;
     }
+
+    /** @return WorldManager for registering worlds and world handlers */
+    public static WorldManager getWorldManager() {
+        return worldManager;
+    }
+
 
     /** @return ConfigService for loading & saving YAML configs */
     public static ConfigService getConfigService() {
