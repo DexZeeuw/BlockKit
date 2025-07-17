@@ -17,6 +17,7 @@ World world = BlockKit.worldBuilder()
     .type(WorldType.FLAT)
     .preset(WorldPreset.VOID)
     .build();
+```
 
 ---
 
