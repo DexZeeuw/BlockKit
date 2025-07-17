@@ -1,170 +1,95 @@
-# BlockKit
+# 🧱 BlockKit ![🛠](https://img.shields.io/badge/Minecraft-Toolkit-green?logo=github)
 
-A modular Java utility and builder library for rapid, maintainable Bukkit/Spigot plugin development. BlockKit bundles your most-used helpers into three clear layers—API contracts, core implementations and optional DSL extensions—so you can focus on features, not boilerplate.
-
----
-
-## 📦 Modules overview
-
-| Module          | Purpose                                                                  |
-| --------------- | ------------------------------------------------------------------------ |
-| blockkit-api    | Public interfaces and service contracts, zero direct Bukkit dependencies |
-| blockkit-core   | Battle-tested implementations organized by feature                      |
-| blockkit-extras | Opt-in DSL extensions and advanced helpers                              |
+Modulaire toolkit voor Minecraft-plugins op Spigot. Fluente builders, GUI DSLs, config wrappers, en meer.  
+Sinds `v1.0.1` stel je ChatConfig pas **na** `BlockKit.init(...)` in.
 
 ---
 
-## ⚙️ Requirements
+## 🚀 Installatie (Maven + JitPack)
 
-- Java 11 or higher  
-- Gradle 6+ or Maven 3.6+  
-- Bukkit/Spigot 1.16+  
-
----
-
-## 🚀 Quickstart
-
-```bash
-git clone https://github.com/DexZeeuw/BlockKit.git
-cd BlockKit
-
-# Gradle build
-./gradlew build
-
-# or Maven build
-mvn clean install
+```xml
+<dependency>
+  <groupId>com.github.DexZeeuw</groupId>
+  <artifactId>BlockKit</artifactId>
+  <version>1.0.1</version>
+</dependency>
 ```
 
-In your plugin’s `onEnable()`:
+```xml
+<repository>
+  <id>jitpack.io</id>
+  <url>https://jitpack.io</url>
+</repository>
+```
+
+---
+
+## 🧩 Voorbeeldgebruik
 
 ```java
 @Override
 public void onEnable() {
-    BlockKit.init(this);
+    BlockKit.init(this); // init core systems
+
+    ChatConfig cfg = new ChatConfig(this);
+    cfg.setPrefix("&7[DemoPlugin] &r");
+    cfg.setMultiLine(true);
+    BlockKit.setChatConfig(cfg); // activeer chat subsystem
+
+    BlockKit.getChat().broadcast("Plugin is live!");
 }
 ```
 
 ---
 
-## ✨ Core features
+## 📦 Modules
 
-### ChatKit
+| Module       | Functie                                     |
+|--------------|---------------------------------------------|
+| `ChatKit`    | Kleuren, hover/click, multi-line, gradients |
+| `ItemKit`    | Fluente `ItemStack` builder                 |
+| `MenuKit`    | Inventory GUIs, DSL, click-handlers         |
+| `ConfigKit`  | YAML DSL, auto-save, resource loaders       |
+| `TimeKit`    | Countdown/elapsed-formatters                |
+| `FSKit`      | Copy, resource extractie, dir-utils         |
+| `StringKit`  | `StringPipeline`: normalize, pad, accent    |
+| `Extras`     | JSON-chat, PaginationBuilder, kleurutils    |
 
-Send formatted messages to players or console:
+---
+
+## 🛠 API voorbeelden
 
 ```java
-BlockKit.getChat().send(player, "&aHello, world!");
-BlockKit.getChat().broadcast("&cServer restarts in 5 minutes!");
+ItemBuilder sword = BlockKit.itemBuilder(Material.DIAMOND_SWORD)
+    .name("&bEpic Sword")
+    .lore("&7A blade forged by stars", "&7Unbreakable &a+")
+    .addEnchant(Enchantment.DAMAGE_ALL, 3);
+
+MenuBuilder shop = BlockKit.menuBuilder("Shop", 3)
+    .set(11, sword.build())
+    .onClick(11, e -> e.getWhoClicked().sendMessage("You clicked a sword!"))
+    .build();
+
+BlockKit.getMenuManager().register(shop);
 ```
 
-### ItemKit
-
-Fluent builder for `ItemStack` with name, lore, enchants, NBT tags, custom model data:
+Voor texttransformatie:
 
 ```java
-ItemStack sword = BlockKit
-  .itemBuilder(Material.DIAMOND_SWORD)
-  .amount(1)
-  .name("&6Excalibur")
-  .lore("&7Legendary sword", "&aUnbreakable")
-  .enchant(Enchantment.DAMAGE_ALL, 5, true)
-  .tag("rarity", "legendary")
-  .customModelData(101)
-  .build();
-
-player.getInventory().addItem(sword);
-```
-
-### MenuKit
-
-Build and register interactive inventories with click handlers:
-
-```java
-Inventory menu = BlockKit
-  .menuBuilder("Select Option", 3)
-  .background(fillerItem)
-  .item(1, 4, choiceItem)
-  .onClick(1, 4, e -> {
-      Player p = (Player) e.getWhoClicked();
-      BlockKit.getChat().send(p, "You chose it!");
-      p.closeInventory();
-  })
-  .build();
-
-BlockKit.getMenuManager().register(menu);
-player.openInventory(menu);
-```
-
-### ConfigKit
-
-Load, save and query YAML files via a simple DSL:
-
-```java
-ConfigFile cfg = ConfigBuilder.of(this)
-  .fileName("config.yml")
-  .autoSave(true)
-  .register(BlockKit.getConfigService());
-
-String welcome = cfg.getConfiguration()
-  .getString("messages.welcome", "&aWelcome, %player%!");
-BlockKit.getChat().broadcast(welcome.replace("%player%", "Alice"));
-```
-
-### TimeKit
-
-Format durations, countdowns and elapsed times:
-
-```java
-String untilNoon = BlockKit.getTimeService()
-  .until(LocalDateTime.now().plusDays(1).withHour(12).withMinute(0));
-// e.g. "23 hours 58 minutes"
-
-DurationFormatter custom = DurationFormatterBuilder.of()
-  .locale(new Locale("nl"))
-  .skipZeroUnits(false)
-  .labelDays("dag","dagen")
-  .build();
-
-String sinceEvent = custom.since(LocalDateTime.of(2025,7,16,9,0));
-// e.g. "1 dag 6 uur 30 minuten"
+String result = StringPipeline.of("  Hé Rubén ")
+    .stripAccents()
+    .normalizeSpaces()
+    .toLowerCase()
+    .build(); // => "he ruben"
 ```
 
 ---
 
-## 🛠️ Extras (optional)
+## 📘 Wiki en documentatie
 
-| Extra Kit               | Description                                                  |
-| ----------------------- | ------------------------------------------------------------ |
-| StringPipeline          | Chain multiple string transformations in a fluent API        |
-| PaginationBuilder       | Create paginated GUIs with “Previous/Next” navigation        |
-| ChatComponentBuilder    | Build JSON chat components with hover and click events       |
-| FS-helpers              | Filesystem utilities: copy, delete, extract resources, watch |
+🔗 [📘 Wiki](https://github.com/DexZeeuw/BlockKit/wiki)  
+🔗 [📄 README.md](https://github.com/DexZeeuw/BlockKit#readme)
 
 ---
 
-## 📁 Project structure
-
-```text
-blockkit/
-├── blockkit-api
-│   └── src/main/java/com/blockkit/api/…
-├── blockkit-core
-│   └── src/main/java/com/blockkit/…
-└── blockkit-extras
-    └── src/main/java/com/blockkit/…
-```
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository  
-2. Create a feature branch  
-3. Run all unit tests (`./gradlew test` or `mvn test`)  
-4. Submit a pull request  
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+BlockKit vereist Java 17. Gecompileerd voor `Spigot 1.21.5-R0.1-SNAPSHOT`. Gedistribueerd via JitPack.
