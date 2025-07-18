@@ -1,14 +1,20 @@
 package com.blockkit.core.text.builder;
 
+import org.bukkit.Bukkit;
+
+import java.awt.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Bouwt een karakter-voor-karakter kleurgradient tussen twee hex-kleuren.
  */
 public class GradientBuilder {
-    private final int startRGB;
-    private final int endRGB;
+    private final String startRGB;
+    private final String endRGB;
     private boolean bold = false;
 
-    private GradientBuilder(int startRGB, int endRGB) {
+    private GradientBuilder(String startRGB, String endRGB) {
         this.startRGB = startRGB;
         this.endRGB = endRGB;
     }
@@ -17,7 +23,7 @@ public class GradientBuilder {
      * Maak een nieuwe builder met hex-kleuren "#RRGGBB" of "RRGGBB".
      */
     public static GradientBuilder of(String hexStart, String hexEnd) {
-        return new GradientBuilder(hexToRgb(hexStart), hexToRgb(hexEnd));
+        return new GradientBuilder(hexStart, hexEnd);
     }
 
     /**
@@ -32,32 +38,35 @@ public class GradientBuilder {
      * Pas de gradient toe op de tekst.
      */
     public String apply(String text) {
-        StringBuilder out = new StringBuilder();
-        int len = text.length();
-        for (int i = 0; i < len; i++) {
-            float ratio = (len == 1 ? 1f : (float) i / (len - 1));
-            int r = interpolate((startRGB >> 16) & 0xFF, (endRGB >> 16) & 0xFF, ratio);
-            int g = interpolate((startRGB >>  8) & 0xFF, (endRGB >>  8) & 0xFF, ratio);
-            int b = interpolate((startRGB      ) & 0xFF, (endRGB      ) & 0xFF, ratio);
+        StringBuilder gradientText = new StringBuilder(); // StringBuilder to hold the resulting gradient text
+        Color startColor = Color.decode(this.startRGB); // Decode the starting color from hex
+        Color endColor = Color.decode(this.endRGB); // Decode the ending color from hex
 
-            // Bouw de '§x§R§R§G§G§B§B' hex-code
-            String hex = String.format("%02x%02x%02x", r, g, b);
-            out.append('§').append('x');
-            for (char c : hex.toCharArray()) {
-                out.append('§').append(c);
-            }
-            if (bold) out.append("§l");
-            out.append(text.charAt(i));
+        // Loop through each character in the text
+        for (int i = 0; i < text.length(); i++) {
+            float ratio = (float) i / (text.length() - 1); // Calculate the ratio for color interpolation
+            Color currentColor = interpolate(startColor, endColor, ratio); // Get the interpolated color
+            // Format the color code for the current character
+            String colorCode = String.format("&#%02x%02x%02x", currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue());
+            gradientText.append(colorCode).append(text.charAt(i)); // Append the color code and character to the result
         }
-        return out.toString();
+
+        return gradientText.toString(); // Return the final gradient text
     }
 
-    private static int interpolate(int start, int end, float ratio) {
-        return Math.round(start + (end - start) * ratio);
-    }
-
-    private static int hexToRgb(String hex) {
-        String h = hex.startsWith("#") ? hex.substring(1) : hex;
-        return Integer.parseInt(h, 16);
+    /**
+     * Interpolates between two colors based on a given ratio.
+     *
+     * @param start the starting color
+     * @param end   the ending color
+     * @param ratio the ratio for interpolation (0.0 to 1.0)
+     * @return the interpolated Color
+     */
+    private static Color interpolate(Color start, Color end, float ratio) {
+        // Calculate the red, green, and blue components of the interpolated color
+        int r = (int) (start.getRed() + ratio * (end.getRed() - start.getRed()));
+        int g = (int) (start.getGreen() + ratio * (end.getGreen() - start.getGreen()));
+        int b = (int) (start.getBlue() + ratio * (end.getBlue() - start.getBlue()));
+        return new Color(r, g, b); // Return the new Color object
     }
 }
