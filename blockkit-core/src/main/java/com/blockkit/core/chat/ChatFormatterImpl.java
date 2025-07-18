@@ -21,7 +21,7 @@ public class ChatFormatterImpl implements ChatFormatter {
         String prefix = "";
         if (!config.getPrefix().isEmpty()) {
             prefix = GradientBuilder
-                    .of("#fdfefe", "#943126")
+                    .of(config.getPrimaryHex(), config.getSecondaryHex())
                     .bold()
                     .apply(config.getPrefix());
         }
