@@ -8,7 +8,7 @@ package com.blockkit.api.chat;
 public interface ChatConfig {
 
     /**
-     * Haalt de prefix op, bijvoorbeeld "[MyPlugin] "
+     * Haalt de prefix op, bijvoorbeeld "[MyPlugin]"
      */
     String getPrefix();
 
@@ -16,6 +16,16 @@ public interface ChatConfig {
      * Stelt de prefix in. Minecraft color codes (&a, &b, etc.) zijn toegestaan.
      */
     void setPrefix(String prefix);
+
+    /**
+     * Haalt de divider op, bijvoorbeeld "⋙"
+     */
+    String getDivider();
+
+    /**
+     * Stelt de divider in. Speciale tekens zijn toegestaan.
+     */
+    void setDivider(String divider);
 
     /**
      * Of multi-line berichten ondersteund worden.
@@ -28,12 +38,22 @@ public interface ChatConfig {
     void setMultiLine(boolean multiLine);
 
     /**
-     * Delimiter die in de tekst "%nl%" kan vervangen voor een line break.
+     * Haalt de primary hex op, bijvoorbeeld "#FFFF55"
      */
-    String getNewLineDelimiter();
+    String getPrimaryHex();
 
     /**
-     * Stelt de delimiter in voor nieuwe regels.
+     * Stelt de primary hex in. Alleen hex codes toegestaan
      */
-    void setNewLineDelimiter(String delimiter);
+    void setPrimaryHex(String hex);
+
+    /**
+     * Haalt de secondary hex op, bijvoorbeeld "#FFAA00"
+     */
+    String getSecondaryHex();
+
+    /**
+     * Stelt de secondary hex in. Alleen hex codes toegestaan
+     */
+    void setSecondaryHex(String hex);
 }

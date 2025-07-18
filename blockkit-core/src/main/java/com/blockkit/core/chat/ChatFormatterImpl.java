@@ -17,11 +17,20 @@ public class ChatFormatterImpl implements ChatFormatter {
     @Override
     public String format(String rawMessage) {
         String trimmed = rawMessage.trim();
-        String prefix = GradientBuilder
-            .of("#fdfefe", "#943126")
-            .bold()
-            .apply(config.getPrefix());
-        String line = String.format("%s %s %s", prefix, config.getNewLineDelimiter(), trimmed);
+
+        String prefix = "";
+        if (!config.getPrefix().isEmpty()) {
+            prefix = GradientBuilder
+                    .of("#fdfefe", "#943126")
+                    .bold()
+                    .apply(config.getPrefix());
+        }
+        String divider = "";
+        if (!config.getDivider().isEmpty()) {
+            divider = config.getDivider();
+        }
+
+        String line = String.format("%s%s%s", (!prefix.isEmpty()) ? String.format("%s ", prefix) : "", (!divider.isEmpty()) ? String.format("%s ", divider) : "", trimmed);
         return ColorUtils.color(line);
     }
 }
