@@ -20,20 +20,25 @@ public class ChatMessengerImpl implements ChatMessenger {
 
     @Override
     public void send(CommandSender to, String rawMessage) {
-        to.sendMessage(formatter.format(rawMessage));
+        String msg = formatter.format(rawMessage);
+
+        to.sendMessage(msg);
     }
 
     @Override
     public void send(UUID playerUuid, String rawMessage) {
         Player player = Bukkit.getPlayer(playerUuid);
+        String msg = formatter.format(rawMessage);
+
         if (player != null) {
-            send(player, rawMessage);
+            send(player, msg);
         }
     }
 
     @Override
     public void broadcast(String rawMessage) {
         String msg = formatter.format(rawMessage);
+
         Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(msg));
 
         Bukkit.getConsoleSender().sendMessage(msg);
