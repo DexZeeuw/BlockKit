@@ -1,5 +1,6 @@
 package com.blockkit.core.text.builder;
 
+import com.blockkit.core.text.util.ColorUtils;
 import org.bukkit.Bukkit;
 
 import java.awt.*;
@@ -51,7 +52,7 @@ public class GradientBuilder {
             gradientText.append(colorCode).append(text.charAt(i)); // Append the color code and character to the result
         }
 
-        return gradientText.toString(); // Return the final gradient text
+        return ColorUtils.color(gradientText.toString()); // Return the final gradient text
     }
 
     /**
