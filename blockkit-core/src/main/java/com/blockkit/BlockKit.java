@@ -1,8 +1,12 @@
 package com.blockkit;
 
+import com.blockkit.api.listener.ListenerRegister;
+import com.blockkit.api.listener.ListenerService;
 import com.blockkit.api.world.WorldBuilder;
 import com.blockkit.api.world.WorldManager;
 import com.blockkit.core.chat.ChatConfig;
+import com.blockkit.core.listener.ListenerBuilder;
+import com.blockkit.core.listener.ListenerServiceImpl;
 import com.blockkit.core.world.WorldManagerImpl;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
@@ -38,6 +42,7 @@ public final class BlockKit {
     private static MenuManager menuManager;
     private static WorldManager worldManager;
     private static TimeService timeService;
+    private static ListenerService listenerService;
 
     private BlockKit() {
         // prevent instantiation
@@ -66,6 +71,9 @@ public final class BlockKit {
 
         // Time subsystem
         timeService = new TimeService(new DefaultDurationFormatter());
+
+        // listener service
+        listenerService = new ListenerServiceImpl();
     }
 
     /** @return the plugin that initialized BlockKit */
@@ -124,5 +132,13 @@ public final class BlockKit {
     /** @return TimeService for formatting durations and countdowns */
     public static TimeService getTimeService() {
         return timeService;
+    }
+
+    public static ListenerService getListenerService() {
+        return listenerService;
+    }
+    public static ListenerRegister listenerRegister() {
+        return ((com.blockkit.core.listener.ListenerServiceImpl)listenerService)
+                .createRegistrar();
     }
 }
