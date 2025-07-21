@@ -62,6 +62,13 @@ public class WorldManagerImpl implements WorldManager {
     }
 
     @Override
+    public boolean setSpawn(World world, Location spawn) {
+        if (world == null) return false;
+        world.setSpawnLocation(spawn);
+        return true;
+    }
+
+    @Override
     public boolean teleport(Player player, World world) {
         if (player == null || world == null) return false;
         Location spawn = world.getSpawnLocation();

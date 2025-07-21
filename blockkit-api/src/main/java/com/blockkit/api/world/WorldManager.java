@@ -1,6 +1,7 @@
 package com.blockkit.api.world;
 
 import org.bukkit.GameRule;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WeatherType;
 import org.bukkit.entity.Player;
@@ -35,6 +36,15 @@ public interface WorldManager {
      * @return true als geslaagd
      */
     boolean unload(World world);
+
+    /**
+     * Wijzigt de spawn van een wereld
+     *
+     * @param world de wereld
+     * @param spawn de doellocatie
+     * @return true als geslaagd
+     */
+    boolean setSpawn(World world, Location spawn);
 
     /**
      * Teleporteert een speler naar een specifieke wereld.
