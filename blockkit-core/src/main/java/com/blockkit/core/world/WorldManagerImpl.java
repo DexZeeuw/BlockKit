@@ -1,14 +1,21 @@
 package com.blockkit.core.world;
 
+import com.blockkit.BlockKit;
 import com.blockkit.api.world.WorldPreset;
 import com.blockkit.api.world.WorldSpec;
 import com.blockkit.api.world.WorldManager;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockEvent;
+import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.world.WorldEvent;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class WorldManagerImpl implements WorldManager {
@@ -103,6 +110,42 @@ public class WorldManagerImpl implements WorldManager {
     public <T> boolean setGameRule(World world, GameRule<T> rule, T value) {
         if (world == null || rule == null || value == null) return false;
         return world.setGameRule(rule, value);
+    }
+
+    @Override
+    public <E extends Event> WorldManager on(
+            Class<E> eventClass,
+            Consumer<E> handler,
+            World world
+    ) {
+        // hergebruiken van ListenerKit
+        BlockKit.listenerRegister()
+                .on(eventClass, ev -> {
+                    if (ev instanceof org.bukkit.event.world.WorldEvent) {
+                        handler.accept(ev);
+                    } else {
+                        // gebruik helper uit WorldEventRegistrarImpl
+                        String wName = world.getName();
+                        // filter op wereld
+                        org.bukkit.World w = null;
+
+                        if (ev instanceof BlockEvent) {
+                            w = ((BlockEvent) ev).getBlock().getWorld();
+                        }
+                        if (ev instanceof EntityEvent) {
+                            w = ((EntityEvent) ev).getEntity().getWorld();
+                        }
+                        if (ev instanceof PlayerEvent) {
+                            w = ((PlayerEvent) ev).getPlayer().getWorld();
+                        }
+
+                        if (w != null && wName.equals(w.getName())) {
+                            handler.accept(ev);
+                        }
+                    }
+                })
+                .bind();
+        return this;
     }
 
     @Override

@@ -5,8 +5,10 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WeatherType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Interface voor het beheren, aanpassen en creëren van Minecraft–werelden.
@@ -73,6 +75,21 @@ public interface WorldManager {
      * @return true als geslaagd
      */
     <T> boolean setGameRule(World world, GameRule<T> rule, T value);
+
+    /**
+     * Registreer een handler die alleen afgaat in {@code world}.
+     *
+     * @param eventClass het Bukkit Event-type
+     * @param handler    de callback
+     * @param world      de wereld context
+     * @param <E>        subtype van Event
+     * @return deze WorldManager (fluent)
+     */
+    <E extends Event> WorldManager on(
+            Class<E> eventClass,
+            Consumer<E> handler,
+            World world
+    );
 
     /**
      * Exporteert de huidige instellingen als WorldSpec.
