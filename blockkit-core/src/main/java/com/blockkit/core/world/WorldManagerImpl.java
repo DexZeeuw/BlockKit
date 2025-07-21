@@ -73,7 +73,7 @@ public class WorldManagerImpl implements WorldManager {
         if (player == null || world == null) return false;
         Location spawn = world.getSpawnLocation();
         if (spawn == null) spawn = new Location(world, 0, 64, 0);
-        player.teleport(spawn);
+        player.teleport(spawn.add(0.5, 0, 0.5));
         return true;
     }
 
