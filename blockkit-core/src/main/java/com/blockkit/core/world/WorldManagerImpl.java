@@ -121,6 +121,7 @@ public class WorldManagerImpl implements WorldManager {
         // hergebruiken van ListenerKit
         BlockKit.listenerRegister()
                 .on(eventClass, ev -> {
+                    BlockKit.getChat().broadcast(ev.getEventName() + " event");
                     if (ev instanceof org.bukkit.event.world.WorldEvent) {
                         handler.accept(ev);
                     } else {
@@ -133,9 +134,7 @@ public class WorldManagerImpl implements WorldManager {
                             w = ((BlockEvent) ev).getBlock().getWorld();
                         }
                         if (ev instanceof EntityEvent) {
-                            BlockKit.getChat().broadcast(ev.getEventName() + " event");
                             w = ((EntityEvent) ev).getEntity().getWorld();
-                            BlockKit.getChat().broadcast(((EntityEvent) ev).getEntity().getWorld() + " world");
                         }
                         if (ev instanceof PlayerEvent) {
                             w = ((PlayerEvent) ev).getPlayer().getWorld();
