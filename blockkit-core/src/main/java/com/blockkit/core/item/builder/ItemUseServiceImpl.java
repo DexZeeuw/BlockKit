@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 public class ItemUseServiceImpl implements ItemUseService, Listener {
     private static final NamespacedKey KEY =
-            new NamespacedKey(BlockKit.getPlugin(), "itemkit-id");
+            new NamespacedKey(BlockKit.getPlugin(), "blockkit-item-id");
 
     private final Map<UUID, List<Consumer<PlayerInteractEvent>>> registry = new HashMap<>();
 
