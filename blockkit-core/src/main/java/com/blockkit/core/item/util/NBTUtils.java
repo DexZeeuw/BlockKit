@@ -1,5 +1,6 @@
 package com.blockkit.core.item.util;
 
+import com.blockkit.BlockKit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,7 @@ public final class NBTUtils {
     public static void setString(ItemStack stack, String key, String value) {
         ItemMeta meta = stack.getItemMeta();
         meta.getPersistentDataContainer()
-            .set(new NamespacedKey("blockkit", key),
+            .set(new NamespacedKey(BlockKit.getPlugin(), key),
                  PersistentDataType.STRING, value);
         stack.setItemMeta(meta);
     }
@@ -20,6 +21,6 @@ public final class NBTUtils {
     public static Optional<String> getString(ItemStack stack, String key) {
         return Optional.ofNullable(stack.getItemMeta())
             .map(m -> m.getPersistentDataContainer()
-             .get(new NamespacedKey("blockkit", key), PersistentDataType.STRING));
+             .get(new NamespacedKey(BlockKit.getPlugin(), key), PersistentDataType.STRING));
     }
 }
