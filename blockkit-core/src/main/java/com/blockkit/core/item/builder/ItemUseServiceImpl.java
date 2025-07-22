@@ -39,6 +39,9 @@ public class ItemUseServiceImpl implements ItemUseService, Listener {
                 String id = event.getItem().getItemMeta()
                         .getPersistentDataContainer()
                         .get(KEY, PersistentDataType.STRING);
+                event.getItem().getItemMeta().getPersistentDataContainer().getKeys().forEach(k -> {
+                    event.getPlayer().sendMessage("Key: " + k.getKey());
+                });
                 if (id == null) return;
                 event.getPlayer().sendMessage("interact event fase 4");
 
