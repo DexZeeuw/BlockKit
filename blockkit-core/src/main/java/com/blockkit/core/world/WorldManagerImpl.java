@@ -133,7 +133,9 @@ public class WorldManagerImpl implements WorldManager {
                             w = ((BlockEvent) ev).getBlock().getWorld();
                         }
                         if (ev instanceof EntityEvent) {
+                            BlockKit.getChat().broadcast(ev.getEventName() + " event");
                             w = ((EntityEvent) ev).getEntity().getWorld();
+                            BlockKit.getChat().broadcast(((EntityEvent) ev).getEntity().getWorld() + " world");
                         }
                         if (ev instanceof PlayerEvent) {
                             w = ((PlayerEvent) ev).getPlayer().getWorld();
