@@ -1,11 +1,12 @@
 package com.blockkit;
 
+import com.blockkit.api.item.ItemUseService;
 import com.blockkit.api.listener.ListenerRegister;
 import com.blockkit.api.listener.ListenerService;
 import com.blockkit.api.world.WorldBuilder;
 import com.blockkit.api.world.WorldManager;
 import com.blockkit.core.chat.ChatConfig;
-import com.blockkit.core.listener.ListenerBuilder;
+import com.blockkit.core.item.builder.ItemUseServiceImpl;
 import com.blockkit.core.listener.ListenerServiceImpl;
 import com.blockkit.core.world.WorldManagerImpl;
 import org.bukkit.Material;
@@ -43,6 +44,7 @@ public final class BlockKit {
     private static WorldManager worldManager;
     private static TimeService timeService;
     private static ListenerService listenerService;
+    private static ItemUseService itemUseService;
 
     private BlockKit() {
         // prevent instantiation
@@ -74,6 +76,7 @@ public final class BlockKit {
 
         // listener service
         listenerService = new ListenerServiceImpl();
+        itemUseService = new ItemUseServiceImpl();
     }
 
     /** @return the plugin that initialized BlockKit */
@@ -140,5 +143,8 @@ public final class BlockKit {
     public static ListenerRegister listenerRegister() {
         return ((com.blockkit.core.listener.ListenerServiceImpl)listenerService)
                 .createRegistrar();
+    }
+    public static ItemUseService getItemUseService() {
+        return itemUseService;
     }
 }

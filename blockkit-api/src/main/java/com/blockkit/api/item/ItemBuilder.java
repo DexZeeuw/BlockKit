@@ -2,9 +2,11 @@ package com.blockkit.api.item;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Fluent builder voor ItemStacks: materiaal, hoeveelheid, naam, lore, enchants, tags, enz.
@@ -36,6 +38,11 @@ public interface ItemBuilder {
 
     /** Stel custom model data in. */
     ItemBuilder customModelData(int data);
+
+    /**
+     * Register a handler that fires on right-click with this item.
+     */
+    ItemBuilder onUse(Consumer<PlayerInteractEvent> handler);
 
     /** Bouw en retourneer de ItemStack. */
     ItemStack build();
