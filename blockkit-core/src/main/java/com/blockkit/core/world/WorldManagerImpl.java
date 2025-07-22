@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.hanging.HangingEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.world.WorldEvent;
 
@@ -121,7 +122,6 @@ public class WorldManagerImpl implements WorldManager {
         // hergebruiken van ListenerKit
         BlockKit.listenerRegister()
                 .on(eventClass, ev -> {
-                    BlockKit.getChat().broadcast(ev.getEventName() + " event");
                     if (ev instanceof org.bukkit.event.world.WorldEvent) {
                         handler.accept(ev);
                     } else {
@@ -138,6 +138,9 @@ public class WorldManagerImpl implements WorldManager {
                         }
                         if (ev instanceof PlayerEvent) {
                             w = ((PlayerEvent) ev).getPlayer().getWorld();
+                        }
+                        if (ev instanceof HangingEvent) {
+                            w = ((HangingEvent) ev).getEntity().getWorld();
                         }
 
                         if (w != null && wName.equals(w.getName())) {
