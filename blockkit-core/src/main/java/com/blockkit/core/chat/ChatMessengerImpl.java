@@ -28,10 +28,9 @@ public class ChatMessengerImpl implements ChatMessenger {
     @Override
     public void send(UUID playerUuid, String rawMessage) {
         Player player = Bukkit.getPlayer(playerUuid);
-        String msg = formatter.format(rawMessage);
 
         if (player != null) {
-            send(player, msg);
+            send(player, rawMessage);
         }
     }
 
