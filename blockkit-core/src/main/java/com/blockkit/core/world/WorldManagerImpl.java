@@ -11,6 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.hanging.HangingEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.world.WorldEvent;
 
@@ -141,6 +142,9 @@ public class WorldManagerImpl implements WorldManager {
                         }
                         if (ev instanceof HangingEvent) {
                             w = ((HangingEvent) ev).getEntity().getWorld();
+                        }
+                        if (ev instanceof InventoryEvent) {
+                            w = ((InventoryEvent) ev).getView().getPlayer().getWorld();
                         }
 
                         if (w != null && wName.equals(w.getName())) {
