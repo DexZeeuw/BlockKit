@@ -21,6 +21,18 @@ public class GradientBuilder {
     }
 
     /**
+     * Converteer één hex‐kleur "#RRGGBB" naar de legacy §x‐reeks (§x§R§R§G§G§B§B).
+     */
+    public static String toLegacyHex(String hex) {
+        String h = hex.startsWith("#") ? hex.substring(1) : hex;
+        StringBuilder out = new StringBuilder("§x");
+        for (char c : h.toCharArray()) {
+            out.append('§').append(c);
+        }
+        return out.toString();
+    }
+
+    /**
      * Schakel bold styling in.
      */
     public GradientBuilder bold() {
