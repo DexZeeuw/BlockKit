@@ -4,6 +4,7 @@ import com.blockkit.BlockKit;
 import com.blockkit.api.scoreboard.BoardConfig;
 import com.blockkit.core.scoreboard.renderer.ScoreboardRenderer;
 import com.blockkit.core.scoreboard.renderer.TeamBasedRenderer;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -56,10 +57,21 @@ public class ScoreboardManager {
 
     public void showFor(Player player) {
         Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective obj = sb.registerNewObjective(cfg.getId(), "dummy", cfg.getDisplayName());
+
+        // haal titel en run PAPI
+        String rawTitle = cfg.getDisplayName();
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            rawTitle = PlaceholderAPI.setPlaceholders(player, rawTitle);
+        }
+
+        Objective obj = sb.registerNewObjective(
+                cfg.getId(), "dummy", rawTitle
+        );
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+
         player.setScoreboard(sb);
         playerBoards.put(player.getUniqueId(), obj);
+
         updateFor(player);
     }
 
