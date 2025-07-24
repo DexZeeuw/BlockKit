@@ -17,10 +17,9 @@ public final class ColorUtils {
     public static String color(String input) {
         if (input == null) return null;
 
-        // 1) Legacy &‐codes
-        String text = ChatColor.translateAlternateColorCodes('&', input);
+        String text = input;
 
-        // 2) Hex‐RGB → legacy §x codes via GradientBuilder
+        // 1) Hex‐RGB → legacy §x codes via GradientBuilder
         Matcher matcher = HEX_PATTERN.matcher(text);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
@@ -30,6 +29,11 @@ public final class ColorUtils {
         }
         matcher.appendTail(sb);
 
-        return sb.toString();
+        text = sb.toString();
+
+        // 2) Legacy &‐codes
+        text = ChatColor.translateAlternateColorCodes('&', text);
+
+        return text;
     }
 }
