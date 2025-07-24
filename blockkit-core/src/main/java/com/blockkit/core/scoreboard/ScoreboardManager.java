@@ -10,14 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 /**
  * Beheert uitvoering en updates van één scoreboard-config.
  */
 public class ScoreboardManager {
     private final ScoreboardRenderer renderer = new TeamBasedRenderer();
-
     private final BoardConfig cfg;
     private final Map<UUID, Objective> playerBoards = new HashMap<>();
     private final Set<World> worlds = new HashSet<>();
@@ -77,9 +75,7 @@ public class ScoreboardManager {
     void updateFor(Player player) {
         Objective obj = playerBoards.get(player.getUniqueId());
         if (obj != null) {
-            // haal lines uit config
             List<String> lines = cfg.getLines();
-            // render met RGB-ondersteuning
             renderer.render(obj, player, lines);
         }
     }
