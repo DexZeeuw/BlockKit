@@ -1,5 +1,6 @@
 package com.blockkit.core.scoreboard.renderer;
 
+import com.blockkit.core.text.util.ColorUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +32,7 @@ public class TeamBasedRenderer implements ScoreboardRenderer {
             // haal tekst & pas PAPI toe indien nodig
             String text = lines.get(i);
             if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                text = PlaceholderAPI.setPlaceholders(player, text);
+                text = ColorUtils.color(PlaceholderAPI.setPlaceholders(player, text));
             }
 
             // update prefix alleen als gewijzigd
