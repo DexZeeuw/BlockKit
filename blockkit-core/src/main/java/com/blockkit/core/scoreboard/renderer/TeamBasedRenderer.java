@@ -1,6 +1,5 @@
 package com.blockkit.core.scoreboard.renderer;
 
-import com.blockkit.BlockKit;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,8 +23,6 @@ public class TeamBasedRenderer implements ScoreboardRenderer {
         for (int i = 0; i < size; i++) {
             // originele tekst
             String text = lines.get(i);
-
-            BlockKit.getChat().broadcast("Papi enabled: " + ((Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) ? "ja" : "nee"));
 
             // run PAPI als beschikbaar
             if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
