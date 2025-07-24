@@ -2,6 +2,8 @@ package com.blockkit.core.scoreboard;
 
 import com.blockkit.BlockKit;
 import com.blockkit.api.scoreboard.BoardConfig;
+import com.blockkit.core.scoreboard.renderer.ScoreboardRenderer;
+import com.blockkit.core.scoreboard.renderer.TeamBasedRenderer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,6 +16,8 @@ import java.util.stream.IntStream;
  * Beheert uitvoering en updates van één scoreboard-config.
  */
 public class ScoreboardManager {
+    private final ScoreboardRenderer renderer = new TeamBasedRenderer();
+
     private final BoardConfig cfg;
     private final Map<UUID, Objective> playerBoards = new HashMap<>();
     private final Set<World> worlds = new HashSet<>();
@@ -72,19 +76,11 @@ public class ScoreboardManager {
 
     void updateFor(Player player) {
         Objective obj = playerBoards.get(player.getUniqueId());
-        if (obj != null) updateLines(obj);
-    }
-
-    private void updateLines(Objective obj) {
-        // clear old
-        obj.getScoreboard().getEntries()
-            .forEach(entry -> obj.getScoreboard().resetScores(entry));
-
-        List<String> lines = cfg.getLines();
-        int size = lines.size();
-        IntStream.range(0, size).forEach(i -> {
-            String text = lines.get(i);
-            obj.getScore(text).setScore(size - i);
-        });
+        if (obj != null) {
+            // haal lines uit config
+            List<String> lines = cfg.getLines();
+            // render met RGB-ondersteuning
+            renderer.render(obj, player, lines);
+        }
     }
 }
