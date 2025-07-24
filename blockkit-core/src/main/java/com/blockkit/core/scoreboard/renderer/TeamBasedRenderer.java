@@ -25,7 +25,6 @@ public class TeamBasedRenderer implements ScoreboardRenderer {
             // originele tekst
             String text = lines.get(i);
 
-            BlockKit.getChat().broadcast("Is papi: " + ((Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) ? "Ja" : "Nee"));
             // run PAPI als beschikbaar
             if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
                 text = PlaceholderAPI.setPlaceholders(player, text);
