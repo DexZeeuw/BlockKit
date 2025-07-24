@@ -7,19 +7,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Simple helper to translate '&' codes naar Minecraft kleurcodes.
+ * Helper om '&' codes én '#RRGGBB' (of '&#RRGGBB') om te zetten
+ * naar de Minecraft §x‐§R§R§G§G§B§B legacy‐hex reeks.
  */
 public final class ColorUtils {
 
+    private ColorUtils() { }
+
+    // match '#FFAABB' of '&#FFAABB' (case‐insensitive)
     private static final Pattern HEX_PATTERN =
-            Pattern.compile("(?i)#([A-F0-9]{6})");
+        Pattern.compile("(?i)&?#([A-F0-9]{6})");
 
+    /**
+     * Vervang alle '&' color‐codes en hex‐RGB codes krachtig.
+     */
     public static String color(String input) {
-        if (input == null) return null;
+        if (input == null) {
+            return null;
+        }
 
-        String text = input;
+        // 1) Legacy '&' codes
+        String text = ChatColor.translateAlternateColorCodes('&', input);
 
-        // 1) Hex‐RGB → legacy §x codes via GradientBuilder
+        // 2) Hex‐RGB (met of zonder leading '&') → legacy §x‐prefix via GradientBuilder
         Matcher matcher = HEX_PATTERN.matcher(text);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
@@ -29,11 +39,6 @@ public final class ColorUtils {
         }
         matcher.appendTail(sb);
 
-        text = sb.toString();
-
-        // 2) Legacy &‐codes
-        text = ChatColor.translateAlternateColorCodes('&', text);
-
-        return text;
+        return sb.toString();
     }
 }
