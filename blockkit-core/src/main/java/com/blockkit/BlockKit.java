@@ -3,11 +3,15 @@ package com.blockkit;
 import com.blockkit.api.item.ItemUseService;
 import com.blockkit.api.listener.ListenerRegister;
 import com.blockkit.api.listener.ListenerService;
+import com.blockkit.api.scoreboard.ScoreboardBuilder;
+import com.blockkit.api.scoreboard.ScoreboardService;
 import com.blockkit.api.world.WorldBuilder;
 import com.blockkit.api.world.WorldManager;
 import com.blockkit.core.chat.ChatConfig;
 import com.blockkit.core.item.builder.ItemUseServiceImpl;
 import com.blockkit.core.listener.ListenerServiceImpl;
+import com.blockkit.core.scoreboard.ScoreboardBuilderImpl;
+import com.blockkit.core.scoreboard.ScoreboardServiceImpl;
 import com.blockkit.core.world.WorldManagerImpl;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
@@ -45,6 +49,7 @@ public final class BlockKit {
     private static TimeService timeService;
     private static ListenerService listenerService;
     private static ItemUseService itemUseService;
+    private static ScoreboardService scoreboardService;
 
     private BlockKit() {
         // prevent instantiation
@@ -77,6 +82,8 @@ public final class BlockKit {
         // listener service
         listenerService = new ListenerServiceImpl();
         itemUseService = new ItemUseServiceImpl();
+
+        scoreboardService = new ScoreboardServiceImpl();
     }
 
     /** @return the plugin that initialized BlockKit */
@@ -146,5 +153,11 @@ public final class BlockKit {
     }
     public static ItemUseService getItemUseService() {
         return itemUseService;
+    }
+    public static ScoreboardService getScoreboardService() {
+        return scoreboardService;
+    }
+    public static ScoreboardBuilder scoreboardBuilder(String boardId) {
+        return new ScoreboardBuilderImpl(boardId);
     }
 }
