@@ -8,6 +8,12 @@ import com.blockkit.api.scoreboard.ScoreboardService;
 import com.blockkit.api.world.WorldBuilder;
 import com.blockkit.api.world.WorldManager;
 import com.blockkit.core.chat.ChatConfig;
+import com.blockkit.core.fs.file.FileBuilder;
+import com.blockkit.core.fs.file.FileService;
+import com.blockkit.core.fs.file.FileServiceImpl;
+import com.blockkit.core.fs.folder.FolderBuilder;
+import com.blockkit.core.fs.folder.FolderService;
+import com.blockkit.core.fs.folder.FolderServiceImpl;
 import com.blockkit.core.item.builder.ItemUseServiceImpl;
 import com.blockkit.core.listener.ListenerServiceImpl;
 import com.blockkit.core.scoreboard.ScoreboardBuilderImpl;
@@ -33,6 +39,8 @@ import com.blockkit.core.config.ConfigService;
 import com.blockkit.core.time.DefaultDurationFormatter;
 import com.blockkit.core.time.TimeService;
 
+import java.nio.file.Path;
+
 /**
  * Central entry point for BlockKit.
  * Initialize once in your JavaPlugin#onEnable() and access all subsystems
@@ -50,6 +58,8 @@ public final class BlockKit {
     private static ListenerService listenerService;
     private static ItemUseService itemUseService;
     private static ScoreboardService scoreboardService;
+    private static FileService fileService;
+    private static FolderService folderService;
 
     private BlockKit() {
         // prevent instantiation
@@ -84,6 +94,9 @@ public final class BlockKit {
         itemUseService = new ItemUseServiceImpl();
 
         scoreboardService = new ScoreboardServiceImpl();
+
+        folderService = new FolderServiceImpl();
+        fileService = new FileServiceImpl();
     }
 
     /** @return the plugin that initialized BlockKit */
@@ -159,5 +172,21 @@ public final class BlockKit {
     }
     public static ScoreboardBuilder scoreboardBuilder(String boardId) {
         return new ScoreboardBuilderImpl(boardId);
+    }
+    public static FolderService getFolderService() {
+        return folderService;
+    }
+    public static FileService getFileService() {
+        return fileService;
+    }
+    public static FolderBuilder folderBuilder(Path parentPath, String name) {
+        return new FolderBuilder()
+                .parentPath(parentPath)
+                .name(name);
+    }
+    public static FileBuilder fileBuilder(Path parentPath, String name) {
+        return new FileBuilder()
+                .parentPath(parentPath)
+                .name(name);
     }
 }
