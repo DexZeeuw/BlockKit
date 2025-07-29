@@ -173,6 +173,8 @@ public final class BlockKit {
     public static ScoreboardBuilder scoreboardBuilder(String boardId) {
         return new ScoreboardBuilderImpl(boardId);
     }
+
+    /** @return FolderService for folder services */
     public static FolderService getFolderService() {
         return folderService;
     }
