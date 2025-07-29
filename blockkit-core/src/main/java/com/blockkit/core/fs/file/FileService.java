@@ -1,6 +1,9 @@
 package com.blockkit.core.fs.file;
 
+import com.blockkit.core.fs.folder.Folder;
+
 import java.io.IOException;
+import java.util.List;
 
 public interface FileService {
 
@@ -17,4 +20,8 @@ public interface FileService {
     default void deleteFile(FileResource file) throws IOException {
         deleteFile(file.getPath().toString());
     }
+    /**
+     * Haalt alle bestanden in de gegeven folder op.
+     */
+    List<FileResource> listFiles(Folder folder) throws IOException;
 }

@@ -1,7 +1,11 @@
 package com.blockkit.core.fs.file;
 
+import com.blockkit.core.fs.folder.Folder;
+
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileServiceImpl implements FileService {
 
@@ -40,5 +44,29 @@ public class FileServiceImpl implements FileService {
             throw new FileResourceNotFoundException("File not found: " + fileId);
         }
         Files.delete(path);
+    }
+
+    @Override
+    public List<FileResource> listFiles(Folder folder) throws IOException {
+        Path base = folder.getPath();
+        List<FileResource> result = new ArrayList<>();
+
+        if (Files.notExists(base)) {
+            return result;
+        }
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(base)) {
+            for (Path entry : stream) {
+                if (Files.isRegularFile(entry)) {
+                    FileResource file = FileResource.builder()
+                            .parentPath(base)
+                            .name(entry.getFileName().toString())
+                            .build();
+                    result.add(file);
+                }
+            }
+        }
+
+        return result;
     }
 }

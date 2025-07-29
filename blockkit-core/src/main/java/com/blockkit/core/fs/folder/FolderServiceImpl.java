@@ -1,8 +1,12 @@
 package com.blockkit.core.fs.folder;
 
+import com.blockkit.BlockKit;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FolderServiceImpl implements FolderService {
 
@@ -122,5 +126,38 @@ public class FolderServiceImpl implements FolderService {
                      .parentPath(target.getParent())
                      .name(target.getFileName().toString())
                      .build();
+    }
+
+    @Override
+    public List<Folder> listFolders(Folder folder) throws IOException {
+        Path base = folder.getPath();
+        List<Folder> result = new ArrayList<>();
+
+        if (Files.notExists(base)) {
+            return result;
+        }
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(base)) {
+            for (Path entry : stream) {
+                if (Files.isDirectory(entry)) {
+                    Folder sub = Folder.builder()
+                            .parentPath(base)
+                            .name(entry.getFileName().toString())
+                            .build();
+                    result.add(sub);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean hasFile(Folder folder, String fileName) throws IOException {
+        Path base = folder.getPath();
+        Path target = base.resolve(fileName);
+
+        // bestandscontrole: bestaat en is een regulier bestand
+        return Files.exists(target) && Files.isRegularFile(target);
     }
 }

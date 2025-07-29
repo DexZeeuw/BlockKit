@@ -1,6 +1,7 @@
 package com.blockkit.core.fs.folder;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface FolderService {
 
@@ -36,4 +37,18 @@ public interface FolderService {
         return moveFolder(source.getPath().toString(),
                           destParent.getPath().toString());
     }
+
+    /**
+     * Haalt alle directe subfolders van de gegeven folder op.
+     */
+    List<Folder> listFolders(Folder folder) throws IOException;
+
+    /**
+     * Controleert of er in de folder een bestand met de opgegeven naam voorkomt.
+     *
+     * @param folder   de folder waarin gezocht wordt
+     * @param fileName de naam van het bestand (bijv. "test.txt")
+     * @return true als het bestand bestaat, anders false
+     */
+    boolean hasFile(Folder folder, String fileName) throws IOException;
 }
