@@ -69,4 +69,34 @@ public class FileServiceImpl implements FileService {
 
         return result;
     }
+
+    @Override
+    public FileResource moveFile(FileResource file, Folder destinationFolder) throws IOException {
+        return moveFile(file, destinationFolder.getPath());
+    }
+
+    @Override
+    public FileResource moveFile(FileResource file, Path destinationPath) throws IOException {
+        Path source = file.getPath();
+
+        if (!Files.exists(source) || Files.isDirectory(source)) {
+            throw new FileResourceNotFoundException("Bestand niet gevonden: " + source);
+        }
+
+        // Doelpad waar het bestand heen moet
+        Path target = destinationPath.resolve(file.getName());
+
+        if (Files.exists(target)) {
+            throw new IOException("Bestand bestaat al op doelpad: " + target);
+        }
+
+        Files.createDirectories(target.getParent()); // Zorg dat parent bestaat
+        Files.move(source, target);
+
+        // Retourneer nieuw FileResource object
+        return FileResource.builder()
+                .parentPath(target.getParent())
+                .name(target.getFileName().toString())
+                .build();
+    }
 }
