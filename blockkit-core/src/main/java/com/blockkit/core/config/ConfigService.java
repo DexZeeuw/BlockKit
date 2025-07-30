@@ -1,35 +1,36 @@
 package com.blockkit.core.config;
 
-import com.blockkit.config.api.ConfigFile;
+import com.blockkit.api.config.ConfigFile;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Beheert meerdere ConfigFile‐instanties, laadt en slaat ze centraal op.
+ * Manages multiple ConfigFile instances, loading and saving them centrally.
  */
 public class ConfigService {
     private final Map<String, ConfigFile> registry = new HashMap<>();
 
     /**
-     * Register a ConfigFile, which will be loaded immediately.
+     * Registers a ConfigFile, which is loaded immediately.
      *
-     * @param configFile the config file to register
+     * @param configFile the configuration file to register
      */
     public void register(ConfigFile configFile) {
         configFile.load();
-        // use filename as key
-        String name = ((YamlConfig) configFile).getFileName();
-        registry.put(name, configFile);
+        // Use the relative path (including subfolders) as the key
+        String key = configFile.getFileName();
+        registry.put(key, configFile);
     }
 
     /**
-     * Retrieve a previously registered config by its filename.
+     * Retrieves a previously registered configuration by its relative path.
      *
-     * @param fileName the name of the YAML file
-     * @return the ConfigFile instance, or null if not found
+     * @param relativePath the relative path of the YAML file,
+     *                     e.g., "config.yml" or "presets/2d/preset.yml"
+     * @return the corresponding ConfigFile instance, or null if not registered
      */
-    public ConfigFile get(String fileName) {
-        return registry.get(fileName);
+    public ConfigFile get(String relativePath) {
+        return registry.get(relativePath);
     }
 }

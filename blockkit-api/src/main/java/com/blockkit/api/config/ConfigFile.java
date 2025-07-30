@@ -1,4 +1,4 @@
-package com.blockkit.config.api;
+package com.blockkit.api.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -7,15 +7,27 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public interface ConfigFile {
 
-    /** Laadt of herlaadt dit config‐bestand */
+    /**
+     * Loads or reloads this configuration file from disk.
+     */
     void load();
 
-    /** Slaat het bestand op schijf */
+    /**
+     * Saves this configuration file to disk.
+     */
     void save();
 
-    /** Geeft de Bukkit‐wrapper terug */
+    /**
+     * Retrieves the underlying Bukkit FileConfiguration.
+     *
+     * @return the FileConfiguration instance representing this YAML file
+     */
     FileConfiguration getConfiguration();
 
-    /** Haalt de bestandsnaam (incl. .yml) op */
+    /**
+     * Retrieves the relative path (including .yml) within the plugin data folder.
+     *
+     * @return the relative file path, e.g., "config.yml" or "presets/2d/preset.yml"
+     */
     String getFileName();
 }
