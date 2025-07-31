@@ -3,8 +3,12 @@ package com.blockkit.core.command;
 import com.blockkit.api.command.ICommandExecutor;
 import com.blockkit.api.command.context.CommandContext;
 import com.blockkit.api.command.context.TabContext;
+import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -31,12 +35,18 @@ public class CommandService {
             return;
         }
 
-        cmd.setExecutor((sender, label, args) ->
-            exec.execute(new CommandContext(sender, label, args)));
+        // Correct onCommand signature: (sender, command, label, args)
+        cmd.setExecutor((sender, command, label, args) ->
+            exec.execute(new CommandContext(sender, label, args))
+        );
+
+        // Correct onTabComplete signature: (sender, command, alias, args)
         if (exec.hasTabCompleter()) {
-            cmd.setTabCompleter((sender, label, args) ->
-                exec.tabComplete(new TabContext(sender, label, args)));
+            cmd.setTabCompleter((sender, command, alias, args) ->
+                exec.tabComplete(new TabContext(sender, alias, args))
+            );
         }
+
         log.info("Registered command '/" + name + "'");
     }
 }
