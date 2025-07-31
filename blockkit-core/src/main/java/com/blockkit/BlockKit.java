@@ -8,6 +8,7 @@ import com.blockkit.api.scoreboard.ScoreboardService;
 import com.blockkit.api.world.WorldBuilder;
 import com.blockkit.api.world.WorldManager;
 import com.blockkit.core.chat.ChatConfig;
+import com.blockkit.core.command.CommandService;
 import com.blockkit.core.fs.file.FileBuilder;
 import com.blockkit.core.fs.file.FileService;
 import com.blockkit.core.fs.file.FileServiceImpl;
@@ -60,6 +61,7 @@ public final class BlockKit {
     private static ScoreboardService scoreboardService;
     private static FileService fileService;
     private static FolderService folderService;
+    private static CommandService commandService;
 
     private BlockKit() {
         // prevent instantiation
@@ -97,6 +99,9 @@ public final class BlockKit {
 
         folderService = new FolderServiceImpl();
         fileService = new FileServiceImpl();
+
+        // Command subsystem
+        commandService = new CommandService(pl);
     }
 
     /** @return the plugin that initialized BlockKit */
@@ -190,5 +195,10 @@ public final class BlockKit {
         return new FileBuilder()
                 .parentPath(parentPath)
                 .name(name);
+    }
+
+    /** @return the CommandService for registering and building commands */
+    public static CommandService getCommandService() {
+        return commandService;
     }
 }
