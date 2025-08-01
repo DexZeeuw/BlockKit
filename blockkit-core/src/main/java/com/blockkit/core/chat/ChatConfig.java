@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
  *   multiLine: false
  *   newLineDelimiter: "%nl%"
  */
-public class ChatConfig {
+public class ChatConfig implements com.blockkit.api.chat.ChatConfig {
 
     private final Plugin plugin;
     private String prefix = "";
@@ -20,48 +20,80 @@ public class ChatConfig {
 
     private String primaryHex = "";
     private String secondaryHex = "";
+    private String tertiaryHex = "";
+    private String quaternaryHex = "";
 
     public ChatConfig(Plugin plugin) {
         this.plugin = plugin;
     }
 
+    @Override
     public String getPrefix() {
-        return prefix;
+        return this.prefix;
     }
 
-    public String getDivider() {
-        return divider;
-    }
-
-    public boolean isMultiLine() {
-        return multiLine;
-    }
-
-    public String getPrimaryHex() {
-        return primaryHex;
-    }
-
-    public String getSecondaryHex() {
-        return secondaryHex;
-    }
-
+    @Override
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
+    @Override
+    public String getDivider() {
+        return this.divider;
+    }
+
+    @Override
     public void setDivider(String divider) {
         this.divider = divider;
     }
 
+    @Override
+    public boolean isMultiLine() {
+        return this.multiLine;
+    }
+
+    @Override
     public void setMultiLine(boolean multiLine) {
         this.multiLine = multiLine;
     }
 
-    public void setPrimaryHex(String primaryHex) {
-        this.primaryHex = primaryHex;
+    @Override
+    public String getPrimaryHex() {
+        return this.primaryHex;
     }
 
-    public void setSecondaryHex(String secondaryHex) {
-        this.secondaryHex = secondaryHex;
+    @Override
+    public void setPrimaryHex(String hex) {
+        this.primaryHex = hex;
+    }
+
+    @Override
+    public String getSecondaryHex() {
+        return this.secondaryHex;
+    }
+
+    @Override
+    public void setSecondaryHex(String hex) {
+        this.secondaryHex = hex;
+    }
+
+    @Override
+    public String getTertiaryHex() {
+        return this.tertiaryHex;
+    }
+
+    @Override
+    public void setTertiaryHex(String hex) {
+        this.tertiaryHex = hex;
+    }
+
+    @Override
+    public String getQuaternaryHex() {
+        return this.quaternaryHex;
+    }
+
+    @Override
+    public void setQuaternaryHex(String hex) {
+        this.quaternaryHex = hex;
     }
 }

@@ -56,4 +56,24 @@ public interface ChatConfig {
      * Stelt de secondary hex in. Alleen hex codes toegestaan
      */
     void setSecondaryHex(String hex);
+
+    /**
+     * Haalt de tertiary hex op, bijvoorbeeld "#55FF55"
+     */
+    String getTertiaryHex();
+
+    /**
+     * Stelt de tertiary hex in. Alleen hex codes toegestaan
+     */
+    void setTertiaryHex(String hex);
+
+    /**
+     * Haalt de quaternary hex op, bijvoorbeeld "#55FF55"
+     */
+    String getQuaternaryHex();
+
+    /**
+     * Stelt de quaternary hex in. Alleen hex codes toegestaan
+     */
+    void setQuaternaryHex(String hex);
 }
