@@ -160,4 +160,29 @@ public class FolderServiceImpl implements FolderService {
         // bestandscontrole: bestaat en is een regulier bestand
         return Files.exists(target) && Files.isRegularFile(target);
     }
+
+    @Override
+    public void restoreFolderContents(Folder fromFolder, Folder toFolder) throws IOException {
+        Path source = fromFolder.getPath();
+        Path target = toFolder.getPath();
+
+        if (!Files.exists(source) || !Files.isDirectory(source)) {
+            throw new FolderNotFoundException("Bronfolder bestaat niet: " + source);
+        }
+        if (!Files.exists(target) || !Files.isDirectory(target)) {
+            Files.createDirectories(target); // Zorg dat doel bestaat
+        }
+
+        // Verplaats alle inhoud (geen rootfolder zelf, alleen inhoud)
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(source)) {
+            for (Path entry : stream) {
+                Path dest = target.resolve(entry.getFileName());
+                Files.move(entry, dest, StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+
+        // Verwijder lege source-folder
+        Files.delete(source);
+    }
+
 }

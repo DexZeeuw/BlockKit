@@ -51,4 +51,13 @@ public interface FolderService {
      * @return true als het bestand bestaat, anders false
      */
     boolean hasFile(Folder folder, String fileName) throws IOException;
+
+    /**
+     * Verplaatst de inhoud van doelFolder naar bronFolder en verwijdert daarna de doelFolder.
+     *
+     * @param fromFolder de map waarvan je de inhoud wilt verplaatsen
+     * @param toFolder   de map waarnaar de inhoud moet gaan
+     * @throws IOException bij I/O-fouten
+     */
+    void restoreFolderContents(Folder fromFolder, Folder toFolder) throws IOException;
 }
