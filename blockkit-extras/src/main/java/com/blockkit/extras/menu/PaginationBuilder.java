@@ -1,7 +1,9 @@
-package com.blockkit.menu.extras;
+package com.blockkit.extras.menu;
 
 import com.blockkit.BlockKit;
 import com.blockkit.api.menu.MenuBuilder;
+import com.blockkit.core.text.builder.GradientBuilder;
+import com.blockkit.core.text.util.ColorUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -25,11 +27,17 @@ public class PaginationBuilder {
                .build();
     private ItemStack prevButton =
         BlockKit.itemBuilder(Material.ARROW)
-               .name("&cVorige")
+               .name(ColorUtils.color(
+                       GradientBuilder.of(BlockKit.getChatConfig().getPrimaryHex(), BlockKit.getChatConfig().getSecondaryHex())
+                               .apply("Vorige")
+               ))
                .build();
     private ItemStack nextButton =
         BlockKit.itemBuilder(Material.ARROW)
-               .name("&aVolgende")
+                .name(ColorUtils.color(
+                        GradientBuilder.of(BlockKit.getChatConfig().getPrimaryHex(), BlockKit.getChatConfig().getSecondaryHex())
+                                .apply("Volgende")
+                ))
                .build();
 
     // standaard: links-onder en rechts-onder
