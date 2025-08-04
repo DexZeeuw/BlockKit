@@ -59,10 +59,6 @@ public class ItemUseServiceImpl implements ItemUseService, Listener {
         if (meta == null) return;
         String id = meta.getPersistentDataContainer()
                 .get(KEY, PersistentDataType.STRING);
-        meta.getPersistentDataContainer().getKeys().forEach(k -> {
-            BlockKit.getChat().broadcast("keys; " + k);
-        });
-        BlockKit.getChat().broadcast("ID: " + id);
         if (id == null) return;
         List<Consumer<InventoryClickEvent>> handlers =
                 clickRegistry.get(UUID.fromString(id));
