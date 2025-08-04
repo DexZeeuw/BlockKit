@@ -5,6 +5,7 @@ import com.blockkit.api.item.ItemBuilder;
 import com.blockkit.api.item.ItemUseService;
 import com.blockkit.core.item.util.NBTUtils;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,7 +25,8 @@ public class ItemBuilderImpl implements ItemBuilder {
     private final ItemMeta meta;
 
     private final UUID itemId = UUID.randomUUID();
-    private final List<Consumer<PlayerInteractEvent>> useHandlers = new ArrayList<>();
+    private final List<Consumer<PlayerInteractEvent>> useHandlers   = new ArrayList<>();
+    private final List<Consumer<InventoryClickEvent>> clickHandlers = new ArrayList<>();  // ← new
 
     public ItemBuilderImpl(Material material) {
         this.stack = new ItemStack(material);
@@ -80,13 +82,20 @@ public class ItemBuilderImpl implements ItemBuilder {
     }
 
     @Override
+    public ItemBuilder onClick(Consumer<InventoryClickEvent> handler) {  // ← new
+        clickHandlers.add(handler);
+        return this;
+    }
+
+    @Override
     public ItemStack build() {
+        // write item-ID to NBT
+        NBTUtils.setString(stack, ITEM_ID_KEY, itemId.toString());
         stack.setItemMeta(meta);
 
-        NBTUtils.setString(stack, ITEM_ID_KEY, itemId.toString());
-
-        ItemUseService useSvc = BlockKit.getItemUseService();
-        useHandlers.forEach(h -> useSvc.registerUse(itemId, h));
+        ItemUseService svc = BlockKit.getItemUseService();
+        useHandlers.forEach(h   -> svc.registerUse(itemId, h));
+        clickHandlers.forEach(h -> svc.registerClick(itemId, h));       // ← register click
 
         return stack;
     }

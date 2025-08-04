@@ -6,25 +6,32 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;    // ← import
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 public class ItemUseServiceImpl implements ItemUseService, Listener {
     private static final NamespacedKey KEY =
-            new NamespacedKey(BlockKit.getPlugin(), "blockkit-item-id");
+        new NamespacedKey(BlockKit.getPlugin(), "blockkit-item-id");
 
-    private final Map<UUID, List<Consumer<PlayerInteractEvent>>> registry = new HashMap<>();
+    private final Map<UUID, List<Consumer<PlayerInteractEvent>>>    useRegistry   = new HashMap<>();
+    private final Map<UUID, List<Consumer<InventoryClickEvent>>> clickRegistry = new HashMap<>();  // ← new
 
     public ItemUseServiceImpl() {
-        // registreer listener bij ListenerService
         BlockKit.getListenerService().register(this);
     }
 
     @Override
     public void registerUse(UUID itemId, Consumer<PlayerInteractEvent> handler) {
-        registry.computeIfAbsent(itemId, k -> new ArrayList<>()).add(handler);
+        useRegistry.computeIfAbsent(itemId, k -> new ArrayList<>()).add(handler);
+    }
+
+    @Override
+    public void registerClick(UUID itemId, Consumer<InventoryClickEvent> handler) {  // ← new
+        clickRegistry.computeIfAbsent(itemId, k -> new ArrayList<>()).add(handler);
     }
 
     @EventHandler
@@ -32,15 +39,29 @@ public class ItemUseServiceImpl implements ItemUseService, Listener {
         switch (event.getAction()) {
             case RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK -> {
                 if (event.getItem() == null) return;
-                String id = event.getItem().getItemMeta()
-                        .getPersistentDataContainer()
-                        .get(KEY, PersistentDataType.STRING);
+                ItemMeta meta = event.getItem().getItemMeta();
+                if (meta == null) return;
+                String id = meta.getPersistentDataContainer()
+                                .get(KEY, PersistentDataType.STRING);
                 if (id == null) return;
                 List<Consumer<PlayerInteractEvent>> handlers =
-                        registry.get(UUID.fromString(id));
+                    useRegistry.get(UUID.fromString(id));
                 if (handlers != null) handlers.forEach(h -> h.accept(event));
             }
             default -> {}
         }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {  // ← new
+        if (event.getCurrentItem() == null) return;
+        ItemMeta meta = event.getCurrentItem().getItemMeta();
+        if (meta == null) return;
+        String id = meta.getPersistentDataContainer()
+                        .get(KEY, PersistentDataType.STRING);
+        if (id == null) return;
+        List<Consumer<InventoryClickEvent>> handlers =
+            clickRegistry.get(UUID.fromString(id));
+        if (handlers != null) handlers.forEach(h -> h.accept(event));
     }
 }
