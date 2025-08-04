@@ -54,18 +54,15 @@ public class ItemUseServiceImpl implements ItemUseService, Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {// ← new
-        BlockKit.getChat().broadcast("Stap 1");
         if (event.getCurrentItem() == null) return;
         ItemMeta meta = event.getCurrentItem().getItemMeta();
-        BlockKit.getChat().broadcast("Stap 2");
         if (meta == null) return;
         String id = meta.getPersistentDataContainer()
-                        .get(KEY, PersistentDataType.STRING);
-        BlockKit.getChat().broadcast("Stap 3");
+                .get(KEY, PersistentDataType.STRING);
+        BlockKit.getChat().broadcast("ID: " + id);
         if (id == null) return;
         List<Consumer<InventoryClickEvent>> handlers =
-            clickRegistry.get(UUID.fromString(id));
-        BlockKit.getChat().broadcast("Stap 4");
+                clickRegistry.get(UUID.fromString(id));
         if (handlers != null) handlers.forEach(h -> h.accept(event));
     }
 }
