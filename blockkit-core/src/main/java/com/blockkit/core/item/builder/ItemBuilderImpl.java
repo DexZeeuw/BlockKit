@@ -25,7 +25,7 @@ public class ItemBuilderImpl implements ItemBuilder {
     private final ItemMeta meta;
 
     private final UUID itemId = UUID.randomUUID();
-    private final List<Consumer<PlayerInteractEvent>> useHandlers   = new ArrayList<>();
+    private final List<Consumer<PlayerInteractEvent>> useHandlers = new ArrayList<>();
     private final List<Consumer<InventoryClickEvent>> clickHandlers = new ArrayList<>();  // ← new
 
     public ItemBuilderImpl(Material material) {
@@ -76,22 +76,15 @@ public class ItemBuilderImpl implements ItemBuilder {
     }
 
     @Override
-    public ItemBuilder onUse(Consumer<PlayerInteractEvent> handler) {
-        useHandlers.add(handler);
-        return this;
-    }
+    public ItemBuilder onUse(Consumer<PlayerInteractEvent> handler) { useHandlers.add(handler); return this; }
 
     @Override
-    public ItemBuilder onClick(Consumer<InventoryClickEvent> handler) {  // ← new
-        clickHandlers.add(handler);
-        return this;
-    }
+    public ItemBuilder onClick(Consumer<InventoryClickEvent> handler) { clickHandlers.add(handler); return this; }
 
     @Override
     public ItemStack build() {
-        // write item-ID to NBT
-        NBTUtils.setString(stack, ITEM_ID_KEY, itemId.toString());
         stack.setItemMeta(meta);
+        NBTUtils.setString(stack, ITEM_ID_KEY, itemId.toString());
 
         ItemUseService svc = BlockKit.getItemUseService();
         useHandlers.forEach(h   -> svc.registerUse(itemId, h));
