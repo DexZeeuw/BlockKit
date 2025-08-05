@@ -67,7 +67,7 @@ public class WorldManagerImpl implements WorldManager {
 
     @Override
     public boolean unload(World world) {
-        return Bukkit.unloadWorld(world, false);
+        return Bukkit.unloadWorld(world, true);
     }
 
     @Override
