@@ -32,6 +32,19 @@ public interface FolderService {
                           destParent.getPath().toString(),
                           includeContents);
     }
+    /**
+     * Kopieert een folder naar een andere parent én geeft 'm een nieuwe naam.
+     *
+     * @param sourceFolderId      pad naar bronfolder
+     * @param destParentFolderId  pad naar doel-parent (moet bestaan)
+     * @param newFolderName       de naam die de gekopieerde folder moet krijgen
+     * @param includeContents     of de inhoud ook moet worden meegenomen
+     * @return de nieuwe Folder-representatie (parentPath + newFolderName)
+     */
+    Folder copyFolder(String sourceFolderId,
+                      String destParentFolderId,
+                      String newFolderName,
+                      boolean includeContents) throws IOException;
     default Folder moveFolder(Folder source,
                               Folder destParent) throws IOException {
         return moveFolder(source.getPath().toString(),

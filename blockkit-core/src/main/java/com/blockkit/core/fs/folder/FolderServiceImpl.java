@@ -102,6 +102,59 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
+    public Folder copyFolder(String sourceFolderId,
+                             String destParentFolderId,
+                             String newFolderName,
+                             boolean includeContents) throws IOException {
+        Path source     = Paths.get(sourceFolderId);
+        Path destParent = Paths.get(destParentFolderId);
+
+        // Validaties
+        if (!Files.exists(source) || !Files.isDirectory(source)) {
+            throw new FolderNotFoundException("Source folder not found: " + source);
+        }
+        if (!Files.exists(destParent) || !Files.isDirectory(destParent)) {
+            throw new FolderNotFoundException("Target parent not found: " + destParent);
+        }
+
+        // Bouw het targetpad met de nieuwe naam
+        Path target = destParent.resolve(newFolderName);
+        if (Files.exists(target)) {
+            throw new IOException("Folder already exists: " + target);
+        }
+
+        // Kopieer inhoud of maak alleen de lege map
+        if (includeContents) {
+            Files.walkFileTree(source, new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                        throws IOException {
+                    Path rel  = source.relativize(dir);
+                    Files.createDirectories(target.resolve(rel));
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                        throws IOException {
+                    Path rel = source.relativize(file);
+                    Files.copy(file, target.resolve(rel));
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } else {
+            Files.createDirectories(target);
+        }
+
+        // Retourneer de nieuwe Folder
+        return Folder.builder()
+                .parentPath(target.getParent())
+                .name(target.getFileName().toString())
+                .build();
+    }
+
+
+    @Override
     public Folder moveFolder(String sourceFolderId,
                              String destParentFolderId) throws IOException {
         Path source = Paths.get(sourceFolderId);
