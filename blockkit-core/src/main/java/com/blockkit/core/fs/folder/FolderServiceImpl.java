@@ -219,23 +219,44 @@ public class FolderServiceImpl implements FolderService {
         Path source = fromFolder.getPath();
         Path target = toFolder.getPath();
 
+        // Validatie bron
         if (!Files.exists(source) || !Files.isDirectory(source)) {
             throw new FolderNotFoundException("Bronfolder bestaat niet: " + source);
         }
-        if (!Files.exists(target) || !Files.isDirectory(target)) {
-            Files.createDirectories(target); // Zorg dat doel bestaat
-        }
+        // Zorg dat de doelmap wél bestaat (maakt ook alle parents aan)
+        Files.createDirectories(target);
 
-        // Verplaats alle inhoud (geen rootfolder zelf, alleen inhoud)
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(source)) {
-            for (Path entry : stream) {
-                Path dest = target.resolve(entry.getFileName());
-                Files.move(entry, dest, StandardCopyOption.REPLACE_EXISTING);
+        // Loop recursief door alle bestanden en mappen in 'source'
+        Files.walkFileTree(source, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                    throws IOException {
+                // Maak de corresponderende directory in target
+                Path rel    = source.relativize(dir);
+                Path destDir = target.resolve(rel);
+                if (Files.notExists(destDir)) {
+                    Files.createDirectories(destDir);
+                }
+                return FileVisitResult.CONTINUE;
             }
-        }
 
-        // Verwijder lege source-folder
-        Files.delete(source);
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException {
+                // Verplaats elk bestand naar zijn plek onder target
+                Path rel      = source.relativize(file);
+                Path destFile = target.resolve(rel);
+                Files.move(file, destFile, StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+                    throws IOException {
+                // Zodra een map leeg is (alle inhoud al verplaatst), delete je 'm
+                Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
-
 }
